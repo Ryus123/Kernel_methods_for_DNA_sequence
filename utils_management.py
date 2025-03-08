@@ -13,6 +13,7 @@ Last update 12/02/24 (E.)
 
 ### --- Import
 import pandas as pd
+import numpy as np
 
 ### --- Function
 def load_set(path:str):
@@ -24,7 +25,14 @@ def load_set(path:str):
     Returns:
         pd.dataframe : dataframe with columns Id, seq
     """
-    return pd.read_csv('data/'+path)
+    mat_100 = (len(path.split("_")) == 2) #If it is the mat100 set
+    
+    if mat_100:
+        
+        return np.loadtxt('data/'+path, delimiter=' ') # Return a np.array and the associade id of each row
+    
+    else:
+        return pd.read_csv('data/'+path) # Return the dataframe
 
 
 def export_prediction(pred:pd.DataFrame):
