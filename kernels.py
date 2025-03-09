@@ -20,7 +20,9 @@ import numpy as np
 #############################################################
 #### Class
 #############################################################
-        
+
+
+### - Classical kernels
 class RBF:    
     def __init__(self, sigma):
         self.sigma = sigma
@@ -107,3 +109,41 @@ class Min:
         
     def save_gram_matrix(self):
         np.save('save_Gram/Min.npy', self.gram_matrix)
+    
+
+### - Kernels for biological sequences
+        
+class Spectrum:    
+    def __init__(self, k):
+        self.k = k
+        self.gram_matrix = None
+            
+    def kernel(self,X,Y):
+        ## Input vectors X and Y of shape Nxd and Mxd
+        N, M = X.shape[0], Y.shape[0]
+        K = np.zeros((N, M))
+
+        for i in range(N):
+            substr_x, phi_x = np.unique([X[i][l:l+self.k] for l in range(len(X[i])-self.k+1)], return_counts=True)
+
+            if N != M:
+                for j in range(M):
+                    K[i, j] = np.sum(np.array( np.char.count(Y[j], substr_x))*phi_x)
+            else:
+                for j in range(i, M):  
+                    K[i, j] = np.sum(np.array(np.char.count(Y[j], substr_x))*phi_x)
+                    K[i, j] = K[j, i]
+                    
+            if i%1000 == 0:
+                print(f'Obs {i} done')
+        
+        return K   ## Matrix of shape NxM
+        
+    def pairwise_distance(self, i, j):
+        if i > j :
+            return self.gram_matrix[i,j]
+        elif i <= j:
+            return self.gram_matrix[j, i]
+        
+    def save_gram_matrix(self, path):
+        np.save(path, self.gram_matrix) 
