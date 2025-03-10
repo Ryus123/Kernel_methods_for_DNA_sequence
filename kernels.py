@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 This script contains the computation
-of different kernel functions
+of differents kernel functions
 
 Created on 12/02/24
 
-Last update 12/02/24 (E.)
+Last update 09/03/24 (E.)
 
 @author: E. DELAR
 """
@@ -34,7 +34,7 @@ class RBF:
         Y_norm = np.sum(Y ** 2, axis=1).reshape(1, -1)
         
         dist_2 = X_norm + Y_norm - 2 * np.dot(X, Y.T) 
-        dist_2 /= 2 * (self.sigma ** 2)
+        dist_2 /= 2 * (self.sigma ** 2) + 1e-10
         self.gram_matrix = np.exp(- dist_2)
         
         return np.copy(self.gram_matrix)   ## Matrix of shape NxM

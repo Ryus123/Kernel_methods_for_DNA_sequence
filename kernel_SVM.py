@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 This script contains the computation
-of different kernel functions
+of the Kernel SVM method
 
 Created on 12/02/24
 
-Last update 12/02/24 (E.)
+Last update 09/03/24 (E.)
 
 @author: E. DELAR
 """
