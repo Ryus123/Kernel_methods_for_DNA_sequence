@@ -16,7 +16,6 @@ Last update 09/03/24 (E.)
 #############################################################
 import numpy as np
 
-
 #############################################################
 #### Class
 #############################################################
@@ -132,10 +131,12 @@ class Spectrum:
             else:
                 for j in range(i, M):  
                     K[i, j] = np.sum(np.array(np.char.count(Y[j], substr_x))*phi_x)
-                    K[i, j] = K[j, i]
-                    
-            if i%1000 == 0:
-                print(f'Obs {i} done')
+                    if i != j:
+                        K[j, i] = K[i, j]
+            
+            # Show progress        
+            # if i%1000 == 0:
+            #     print(f'Obs {i} done')
         
         return K   ## Matrix of shape NxM
         

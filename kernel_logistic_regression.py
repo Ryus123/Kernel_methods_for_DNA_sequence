@@ -15,8 +15,6 @@ Last update 09/03/24 (E.)
 #### Import
 #############################################################
 import numpy as np
-from scipy import optimize
-import cvxopt
 
 #############################################################
 #### Class
@@ -31,7 +29,7 @@ class Kernel_LogReg:
         self.alpha = None
         self.train = None
         
-    def fit(self, X, y, max_iter = 100, threshold = 1e-6):
+    def fit(self, X, y, max_iter = 10, threshold = 1e-6):
         N = X.shape[0]
         self.gram_matrix = self.kernel(X,X)
         self.gram_matrix -= np.mean(self.gram_matrix, axis=0)
@@ -73,14 +71,16 @@ class Kernel_LogReg:
             
             self.alpha = alpha
     
-    def predict(self, X, threshold=0):
-        """
-        X: array (n_samples, n_features)\\
-        Return: float array (n_samples,)
-        """
+    def score(self,X):
         K = self.kernel(X, self.train)
         K -= np.mean(K, axis=0)
         K /= np.std(K, axis=0)
         y = np.dot(K, self.alpha)
+        return y
+    
+    def predict(self, X, threshold=.5):
+        u = self.score(X)
+        u = np.clip(u, -200, 200)
+        proba = 1/(1+np.exp(-u))
         
-        return np.where(y >= 0, 1, -1)
+        return np.where(proba >= threshold, 1, -1)

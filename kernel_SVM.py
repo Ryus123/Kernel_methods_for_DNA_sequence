@@ -15,7 +15,6 @@ Last update 09/03/24 (E.)
 #### Import
 #############################################################
 import numpy as np
-from scipy import optimize
 import cvxopt
 
 #############################################################
@@ -50,6 +49,7 @@ class KernelSVC:
         self.alpha = np.array(sol['x']).T[0]
         
     def fit(self, X, y):
+        y[y==-1] = 0
         N = len(y)
         self.Gram_matrix = self.kernel(X,X)
         ### Find the optimal solution with cvxopt
@@ -74,8 +74,10 @@ class KernelSVC:
         sep = self.kernel(x, self.support) @ self.v_support
         return sep
     
+    def score(self, X):
+        d = self.separating_function(X)
+        return d+self.b
     
     def predict(self, X):
-        """ Predict y values in {-1, 1} """
         d = self.separating_function(X)
         return 2 * (d+self.b> 0) - 1
