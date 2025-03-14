@@ -33,9 +33,3 @@ def load_set(path:str):
     
     else:
         return pd.read_csv('data/'+path) # Return the dataframe
-
-
-def export_prediction(pred:pd.DataFrame):
-    #TO DO
-    pass
-    

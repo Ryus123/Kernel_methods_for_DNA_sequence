@@ -121,7 +121,7 @@ class Spectrum:
         ## Input vectors X and Y of shape Nxd and Mxd
         N, M = X.shape[0], Y.shape[0]
         K = np.zeros((N, M))
-
+        print('\nCompute Spectrum kernel...(Time consuming)')
         for i in range(N):
             substr_x, phi_x = np.unique([X[i][l:l+self.k] for l in range(len(X[i])-self.k+1)], return_counts=True)
 
@@ -135,8 +135,8 @@ class Spectrum:
                         K[j, i] = K[i, j]
             
             # Show progress        
-            # if i%1000 == 0:
-            #     print(f'Obs {i} done')
+            if i%1000 == 0:
+                print(f'{i/N:.2f} % done')
         
         return K   ## Matrix of shape NxM
         

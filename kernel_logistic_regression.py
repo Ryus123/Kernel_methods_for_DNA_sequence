@@ -30,6 +30,7 @@ class Kernel_LogReg:
         self.train = None
         
     def fit(self, X, y, max_iter = 10, threshold = 1e-6):
+        print('Training start...')
         N = X.shape[0]
         self.gram_matrix = self.kernel(X,X)
         self.gram_matrix -= np.mean(self.gram_matrix, axis=0)
@@ -72,6 +73,7 @@ class Kernel_LogReg:
             self.alpha = alpha
     
     def score(self,X):
+        print('Prediction starting...')
         K = self.kernel(X, self.train)
         K -= np.mean(K, axis=0)
         K /= np.std(K, axis=0)
